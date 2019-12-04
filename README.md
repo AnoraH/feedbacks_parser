@@ -17,6 +17,7 @@ python manage.py parse <page count> --headless
 * --headless if you need to run browser headless
 #
 ### Create report about all saved feedbacks
+Result directory will be created with all feedbacks
 ```
-python mange.pt report
+python manage.py report
 ```
