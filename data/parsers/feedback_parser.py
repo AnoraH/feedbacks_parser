@@ -2,7 +2,6 @@
 import os
 import string
 import datetime
-import urllib3
 import logging
 from random import choice
 from pprint import pprint
@@ -39,7 +38,6 @@ class Parser(object):
         self._headless = headless
         self.driver = self.get_driver(executable_path=executable_path)
         self.result_dir = result_dir
-        # self.create_data_structure(result_dir=result_dir)
 
     @staticmethod
     def create_data_structure(result_dir):
@@ -111,7 +109,7 @@ class Parser(object):
             "student_name": "Dasha Anora",
             "student_group": 651,
             "student_number": 0,
-            "Data source": "http://firms.turizm.ru/otzyv/6053/",
+            "Data source": "https://firms.turizm.ru/firms_otzyv",
             "date": f'{date.day}_{date.month}_{date.year}',
             "category": mark,
             "filename": f'{result_dir}/{file_name}'
@@ -167,7 +165,6 @@ class Parser(object):
                 review = feedback.find_element_by_class_name('hcr__rate-review-text')
                 text_el = feedback.find_element_by_class_name('hcr__text')
 
-                name = f'{marks.get(str(review.text))}/{self.generator()}.txt'
                 text = text_el.text
                 text_words = text.split()
 
@@ -179,17 +176,6 @@ class Parser(object):
                     except IndexError:
                         self.logger.info('Error in text convertation')
 
-                # TODO: Change it
-                # if review.text in marks:
-                #     try:
-                #         with open(f'{self.result_dir}/{name}', 'w+') as f:
-                #             f.write(text)
-                #     except UnicodeEncodeError:
-                #         print('Encode error')
-                #         continue
-                # else:
-                #     print(review.text)
-
                 if marks.get(str(review.text)) == 'good':
                     mark = 1
                 elif marks.get(str(review.text)) == 'bad':
@@ -197,8 +183,6 @@ class Parser(object):
                 else:
                     mark = 0
 
-                # TODO: Add in db
-                # self.write_json(file_name=name, mark=mark)
                 self.db_callback(text=text, mark=mark)
             except NoSuchElementException:
                 self.logger.info('No such element')
